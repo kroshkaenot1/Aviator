@@ -11,6 +11,7 @@
 * Coroutines
 * Navigation component
 * Jetpack compose
+* Shared Preferences
 
 ## Flow приложения
 Точка старта приложение - открывается меню c предложением начать игру
