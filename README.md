@@ -13,5 +13,16 @@
 * Jetpack compose
 
 ## Flow приложения
-Точка старта приложение - открывается меню
+Точка старта приложение - открывается меню c предложением начать игру
+
 <img alt="img.jpg" height="600" src="readme_images/1.jpg" width="290"/>
+
+При нажатии на GO начинается игра
+
+<img alt="img.jpg" height="600" src="readme_images/2.jpg" width="290"/>
+
+При потери всего количества здоровья открывается меню с задним фоном в зависимости от результата
+
+<img alt="img.jpg" height="600" src="readme_images/3.jpg" width="290"/>
+<img alt="img.jpg" height="600" src="readme_images/4.jpg" width="290"/>
+
