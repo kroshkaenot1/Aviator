@@ -9,7 +9,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class ScoreRepositoryModule {
+interface ScoreRepositoryModule {
     @Binds
-    abstract fun bindScoreRepositoryImplToScoreRepository(Impl: ScoreRepositoryImpl): ScoreRepository
+     fun bindScoreRepositoryImplToScoreRepository(Impl: ScoreRepositoryImpl): ScoreRepository
 }
