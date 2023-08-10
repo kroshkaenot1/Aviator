@@ -13,6 +13,11 @@
 * Jetpack compose
 * Shared Preferences
 
+Приложение написано с
+  соблюдением [Clean Architecture](https://github.com/ImangazalievM/CleanArchitectureManifest/blob/master/README-RU.md)
+  и [MVVM](https://en.wikipedia.org/wiki/Model–view–viewmodel) подхода.
+
+
 ## Flow приложения
 Точка старта приложения - открывается меню c предложением начать игру
 
@@ -22,7 +27,7 @@
 
 <img alt="img.jpg" height="600" src="readme_images/2.jpg" width="290"/>
 
-При потери всего количества здоровья открывается меню с задним фоном в зависимости от результата
+При потерe всего количества здоровья открывается меню с задним фоном в зависимости от результата
 
 <img alt="img.jpg" height="600" src="readme_images/3.jpg" width="290"/>
 <img alt="img.jpg" height="600" src="readme_images/4.jpg" width="290"/>
