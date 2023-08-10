@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="medkit_width">100</integer>
+    <integer name="medkit_height">100</integer>
+
+    <integer name="medkit_spawn_height">-100</integer>
+    <integer name="enemy_plane_spawn_height">-200</integer>
+
+    <integer name="distance_between_plane_bottom">300</integer>
+
+    <integer name="enemy_plane_height">200</integer>
+    <integer name="enemy_plane_width">200</integer>
+
+    <integer name="plane_height">200</integer>
+    <integer name="plane_width">200</integer>
+
+    <integer name="topBar_height">165</integer>
+
+    <integer name="health_points">12</integer>
+
+    <integer name="points_for_kill">10</integer>
+    <integer name="points_for_small_medkit">2</integer>
+
+    <integer name="enemy_damage">1</integer>
+    <integer name="chance_for_small_medkit">50</integer>
+    <integer name="chance_for_big_medkit">200</integer>
+
+</resources>
