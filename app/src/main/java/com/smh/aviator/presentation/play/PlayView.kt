@@ -361,6 +361,8 @@ fun MedKitLogic(
     screenWidthPx: Float,
     enemyMoveSpeed: Int
 ) {
+    val medkitSpawnHeight = integerResource(id = R.integer.medkit_spawn_height)
+    val medkitWidth = integerResource(id = R.integer.medkit_width)
     LaunchedEffect(medkitCreated.value) {
         if (medkitCreated.value) {
             while (medkitOffsetY.value < screenHeightPx) {
@@ -368,8 +370,8 @@ fun MedKitLogic(
                 delay(8)
             }
             medkitCreated.value = false
-            medkitOffsetY.value = -100
-            medkitOffsetX.value = Random.nextInt(0, screenWidthPx.toInt() - 100)
+            medkitOffsetY.value = medkitSpawnHeight
+            medkitOffsetX.value = Random.nextInt(0, screenWidthPx.toInt() - medkitWidth)
         }
     }
 }
