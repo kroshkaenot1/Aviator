@@ -1,4 +1,4 @@
-package com.smh.aviator.presentation
+package com.smh.aviator.presentation.endgame
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -19,8 +19,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.smh.aviator.R
+import com.smh.aviator.presentation.play.SCORE_FONT
 
 @Composable
 fun EndGame(
@@ -28,10 +30,12 @@ fun EndGame(
     navController: NavController,
     score: MutableState<Int>
 ) {
-    val maxScore = 30
+    val endGameViewModel = hiltViewModel<EndGameViewModel>()
+
+    val bestScoreBeated = endGameViewModel.saveScoreToSharedPreferences(score = score.value)
     Box(modifier = modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(id = R.drawable.gamebg),
+            painter = painterResource(id = R.drawable.background05),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = modifier.fillMaxSize()
@@ -48,14 +52,14 @@ fun EndGame(
             modifier = modifier.align(Alignment.Center),
             contentAlignment = Alignment.Center
         ) {
-            if (score.value <= maxScore) {
+            if (bestScoreBeated) {
                 Image(
-                    painter = painterResource(id = R.drawable.text_box01),
+                    painter = painterResource(id = R.drawable.text_box02),
                     contentDescription = null
                 )
             } else {
                 Image(
-                    painter = painterResource(id = R.drawable.text_box02),
+                    painter = painterResource(id = R.drawable.text_box01),
                     contentDescription = null
                 )
             }
@@ -63,7 +67,7 @@ fun EndGame(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                if (score.value <= maxScore) {
+                if (!bestScoreBeated) {
                     Image(
                         modifier = modifier.padding(bottom = 30.dp),
                         painter = painterResource(id = R.drawable.text_plane_crashed),
@@ -107,7 +111,10 @@ fun EndGame(
                         modifier = modifier
                             .weight(1f)
                             .padding(start = 90.dp)
-                            .clickable { navController.navigate("game") },
+                            .clickable {
+                                navController.navigate("game")
+                                score.value = 0
+                            },
                         painter = painterResource(id = R.drawable.ok),
                         contentDescription = null
                     )
@@ -115,7 +122,10 @@ fun EndGame(
                         modifier = modifier
                             .weight(1f)
                             .padding(end = 90.dp)
-                            .clickable { navController.navigate("startMenu") },
+                            .clickable {
+                                navController.navigate("startMenu")
+                                score.value = 0
+                            },
                         painter = painterResource(id = R.drawable.close),
                         contentDescription = null
                     )
@@ -139,7 +149,7 @@ fun EndGame(
                 )
                 Text(
                     modifier = modifier.align(Alignment.Center),
-                    text = maxScore.toString(),
+                    text = endGameViewModel.getScoreFromSharedPreferences().toString(),
                     fontFamily = SCORE_FONT,
                     color = Color.White,
                     style = TextStyle(fontSize = 20.sp)

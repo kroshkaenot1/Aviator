@@ -1,4 +1,4 @@
-package com.smh.aviator.presentation
+package com.smh.aviator.presentation.startmenu
 
 import android.app.Activity
 import androidx.compose.foundation.Image

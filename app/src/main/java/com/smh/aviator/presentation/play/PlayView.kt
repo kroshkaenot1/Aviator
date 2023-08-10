@@ -1,7 +1,6 @@
-package com.smh.aviator.presentation
+package com.smh.aviator.presentation.play
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
@@ -60,8 +59,15 @@ fun Game(
     var planeOffsetX by remember { mutableStateOf(screenWidthPx / 2 - 100) }
     val planeOffsetY by remember { mutableStateOf(screenHeightPx - 300) }
 
-    var enemyPlaneOffsetX by remember { mutableStateOf(Random.nextInt(0, screenWidthPx.toInt() - 100)) }
-    var enemyPlaneOffsetY by remember { mutableStateOf(200) }
+    var enemyPlaneOffsetX by remember {
+        mutableStateOf(
+            Random.nextInt(
+                0,
+                screenWidthPx.toInt() - 100
+            )
+        )
+    }
+    var enemyPlaneOffsetY by remember { mutableStateOf(-200) }
 
     var bulletOffsetX by remember { mutableStateOf(planeOffsetX.toInt() + 90) }
     var bulletOffsetY by remember { mutableStateOf(planeOffsetY + 100) }
@@ -69,17 +75,50 @@ fun Game(
     var enemyBulletOffsetX by remember { mutableStateOf(enemyPlaneOffsetX + 90) }
     var enemyBulletOffsetY by remember { mutableStateOf(enemyPlaneOffsetY + 200) }
 
+    var smallMedKitOffsetX by remember {
+        mutableStateOf(
+            Random.nextInt(
+                0,
+                screenWidthPx.toInt() - 100
+            )
+        )
+    }
+    var smallMedKitOffsetY by remember { mutableStateOf(-100) }
+
+    var bigMedKitOffsetX by remember {
+        mutableStateOf(
+            Random.nextInt(
+                0,
+                screenWidthPx.toInt() - 100
+            )
+        )
+    }
+    var bigMedKitOffsetY by remember { mutableStateOf(-100) }
+
+    val smallMedKitCreated = remember {
+        mutableStateOf(false)
+    }
+    val bigMedKitCreated = remember {
+        mutableStateOf(false)
+    }
     val healthPoints = remember {
         mutableStateOf(12)
     }
+
     val enemyMoveSpeed = 4
     val moveSpeed = 6
     Box(modifier = modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(id = R.drawable.gamebg), contentDescription = null,
+            painter = painterResource(id = R.drawable.background05), contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = modifier.fillMaxSize()
         )
+        Image(painter = painterResource(id = R.drawable.first_aid_kit_small),
+            contentDescription = null,
+            modifier = modifier.offset { IntOffset(smallMedKitOffsetX, smallMedKitOffsetY) })
+        Image(painter = painterResource(id = R.drawable.first_aid_kit_big),
+            contentDescription = null,
+            modifier = modifier.offset { IntOffset(bigMedKitOffsetX, bigMedKitOffsetY) })
         Column(modifier = modifier.height(80.dp)) {
             Row(
                 horizontalArrangement = Arrangement.Center,
@@ -156,13 +195,13 @@ fun Game(
             )
         }
         Image(painter = painterResource(id = R.drawable.plane_enemy), contentDescription = null,
-            modifier = modifier.offset {
-                IntOffset(
-                    enemyPlaneOffsetX,
-                    enemyPlaneOffsetY
-                )
-            }
-                .clickable { healthPoints.value = 0 })
+            modifier = modifier
+                .offset {
+                    IntOffset(
+                        enemyPlaneOffsetX,
+                        enemyPlaneOffsetY
+                    )
+                })
         Image(painter = painterResource(id = R.drawable.bullet), contentDescription = null,
             modifier = modifier.offset { IntOffset(bulletOffsetX, bulletOffsetY) })
         Image(painter = painterResource(id = R.drawable.bullet_enemy), contentDescription = null,
@@ -177,11 +216,37 @@ fun Game(
                 ),
         )
     }
-    LaunchedEffect(enemyPlaneOffsetY){
-        while (enemyBulletOffsetY < screenHeightPx){
+    //big medkit logic
+    LaunchedEffect(bigMedKitCreated.value) {
+        if (bigMedKitCreated.value) {
+            while (bigMedKitOffsetY < screenHeightPx) {
+                bigMedKitOffsetY += enemyMoveSpeed
+                delay(8)
+            }
+            bigMedKitCreated.value = false
+            bigMedKitOffsetY = -100
+            bigMedKitOffsetX = Random.nextInt(0, screenWidthPx.toInt() - 100)
+        }
+    }
+    //small medkit logic
+    LaunchedEffect(smallMedKitCreated.value) {
+        if (smallMedKitCreated.value) {
+            while (smallMedKitOffsetY < screenHeightPx) {
+                smallMedKitOffsetY += enemyMoveSpeed
+                delay(8)
+            }
+            smallMedKitCreated.value = false
+            smallMedKitOffsetY = -100
+            smallMedKitOffsetX = Random.nextInt(0, screenWidthPx.toInt() - 100)
+        }
+    }
+    //enemy bullet logic
+    LaunchedEffect(enemyPlaneOffsetY) {
+        while (enemyBulletOffsetY < screenHeightPx) {
             enemyBulletOffsetY += enemyMoveSpeed
             if (enemyBulletOffsetX >= planeOffsetX && enemyBulletOffsetX <= planeOffsetX + 200
-                && enemyPlaneOffsetY <= planeOffsetY && enemyBulletOffsetY >= planeOffsetY + 200){
+                && enemyBulletOffsetY >= planeOffsetY && enemyBulletOffsetY <= planeOffsetY + 200
+            ) {
                 enemyBulletOffsetY = enemyPlaneOffsetY + 200
                 enemyBulletOffsetX = enemyPlaneOffsetX + 90
 
@@ -192,26 +257,69 @@ fun Game(
         enemyBulletOffsetY = enemyPlaneOffsetY + 200
         enemyBulletOffsetX = enemyPlaneOffsetX + 90
     }
+    //enemy plane logic
     LaunchedEffect(enemyPlaneOffsetY) {
-        while (enemyPlaneOffsetY < screenHeightPx - 200) {
+        while (enemyPlaneOffsetY < screenHeightPx) {
             enemyPlaneOffsetY += enemyMoveSpeed
             delay(3)
         }
-        enemyPlaneOffsetY = 200
+        enemyPlaneOffsetY = -200
         enemyPlaneOffsetX = Random.nextInt(0, screenWidthPx.toInt() - 200)
     }
+    //bullet logic
     LaunchedEffect(bulletOffsetY) {
         while (bulletOffsetY > 165) {
             bulletOffsetY -= moveSpeed
+            // enemy hit condition
             if (bulletOffsetX >= enemyPlaneOffsetX && bulletOffsetX <= enemyPlaneOffsetX + 200
-                && bulletOffsetY >= enemyPlaneOffsetY  && bulletOffsetY <= enemyPlaneOffsetY + 200
+                && bulletOffsetY >= enemyPlaneOffsetY && bulletOffsetY <= enemyPlaneOffsetY + 200
             ) {
-                enemyPlaneOffsetY = 200
+                enemyPlaneOffsetY = -200
                 enemyPlaneOffsetX = Random.nextInt(0, screenWidthPx.toInt() - 200)
 
                 bulletOffsetY = planeOffsetY - 100
                 bulletOffsetX = planeOffsetX.toInt() + 90
-                score.value += 1
+                score.value += 10
+                // chance of small medkit
+                if (score.value % 50 == 0 && score.value != 0) {
+                    if (!smallMedKitCreated.value) {
+                        smallMedKitCreated.value = true
+                    }
+                }
+                // chance of big medkit
+                if (score.value % 200 == 0 && score.value != 0) {
+                    if (!bigMedKitCreated.value) {
+                        bigMedKitCreated.value = true
+                    }
+                }
+            }
+            // small med kit hit condition
+            if (bulletOffsetX >= smallMedKitOffsetX && bulletOffsetX <= smallMedKitOffsetX + 90
+                && bulletOffsetY >= smallMedKitOffsetY && bulletOffsetY <= smallMedKitOffsetY + 80
+            ) {
+                smallMedKitOffsetY = -100
+                smallMedKitOffsetX = Random.nextInt(0, screenWidthPx.toInt() - 200)
+
+                smallMedKitCreated.value = false
+
+                bulletOffsetY = planeOffsetY - 100
+                bulletOffsetX = planeOffsetX.toInt() + 90
+
+                healthPoints.value = (healthPoints.value + 2).coerceIn(0, 12)
+
+            }
+            // big med kit hit condition
+            if (bulletOffsetX >= bigMedKitOffsetX && bulletOffsetX <= bigMedKitOffsetX + 130
+                && bulletOffsetY >= bigMedKitOffsetY && bulletOffsetY <= bigMedKitOffsetY + 80
+            ) {
+                bigMedKitOffsetY = -100
+                bigMedKitOffsetX = Random.nextInt(0, screenWidthPx.toInt() - 200)
+
+                bigMedKitCreated.value = false
+
+                bulletOffsetY = planeOffsetY - 100
+                bulletOffsetX = planeOffsetX.toInt() + 90
+                healthPoints.value += 12 - healthPoints.value
             }
             delay(1)
         }

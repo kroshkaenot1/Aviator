@@ -8,10 +8,12 @@ import androidx.compose.runtime.remember
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.smh.aviator.presentation.EndGame
-import com.smh.aviator.presentation.Game
-import com.smh.aviator.presentation.StartMenu
+import com.smh.aviator.presentation.endgame.EndGame
+import com.smh.aviator.presentation.play.Game
+import com.smh.aviator.presentation.startmenu.StartMenu
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
